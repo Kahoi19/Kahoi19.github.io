@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept — Integrated Solid-Dose Process (ROMACO)</title>
+<style>
+:root{
+  --blue:#005eb8; --blue-d:#004a91; --blue-t:#eaf2fb; --blue-l:#cfe0f3;
+  --ink:#14233a; --mute:#5a6b82; --line:#dbe4ef; --white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--white);line-height:1.6;font-size:17px}
+a{color:var(--blue)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+header.top{border-bottom:1px solid var(--line);background:var(--white);position:sticky;top:0;z-index:10}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}
+@media(max-width:600px){.brand small{display:none}}
+.brand{display:flex;align-items:center;gap:16px}
+.brand svg{display:block;width:auto}
+.brand small{font-weight:500;color:var(--mute);font-size:13px;border-left:1px solid var(--line);padding-left:16px}
+.btn{display:inline-block;background:var(--blue);color:var(--white);text-decoration:none;font-weight:600;padding:13px 22px;border-radius:6px;border:0;cursor:pointer;font-size:16px;transition:background .15s}
+.btn:hover{background:var(--blue-d)}
+.btn.sm{padding:9px 16px;font-size:14px}
+.btn.ghost{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.7)}
+.hero{background:var(--blue);color:var(--white);padding:84px 0 72px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-120px;top:-80px;width:520px;height:520px;border-radius:50%;border:70px solid rgba(255,255,255,.06)}
+.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:13px;font-weight:600;opacity:.85}
+.hero h1{font-size:46px;line-height:1.12;margin:14px 0 18px;max-width:760px;font-weight:700}
+.hero p.lead{font-size:20px;max-width:640px;opacity:.95}
+.hero .act{margin-top:30px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.hero .act .btn{background:var(--white);color:var(--blue)}
+.hero .act .btn:hover{background:var(--blue-t)}
+.hgrid{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;position:relative;z-index:1}
+.hfig{background:var(--white);border-radius:14px;padding:10px;box-shadow:0 24px 50px rgba(0,0,0,.22)}
+.hfig img{width:100%;display:block;border-radius:8px}
+.hfig figcaption{color:var(--mute);font-size:13px;padding:8px 6px 2px}
+.beats{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:28px}
+.beats div{border-top:3px solid var(--blue);padding-top:14px;font-size:15.5px}
+.beats span{display:block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.proof .ctx p{margin-bottom:8px}
+.hero .meta{font-size:14px;opacity:.85;max-width:380px}
+section{padding:80px 0}
+section.tint{background:var(--blue-t)}
+h2{font-size:32px;line-height:1.2;margin-bottom:14px;max-width:760px}
+.sub{color:var(--mute);max-width:720px;font-size:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;margin-top:36px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:26px}
+.card h3{font-size:19px;margin-bottom:4px}
+.card .tag{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.08em;text-transform:uppercase}
+.card ul{margin:12px 0 0 18px;color:var(--ink);font-size:15.5px}
+.card li{margin:4px 0}
+.diagram{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:28px;margin-top:40px}
+.diagram svg{width:100%;height:auto;display:block}
+.links{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:26px}
+.links div{border-left:3px solid var(--blue);padding-left:14px;font-size:15.5px}
+.links b{display:block;margin-bottom:2px}
+.proof{display:grid;grid-template-columns:1.1fr 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:36px;background:var(--white)}
+.proof .num{background:var(--blue);color:var(--white);padding:36px}
+.proof .num .big{font-size:52px;font-weight:700;line-height:1}
+.proof .num .lbl{opacity:.9;margin:6px 0 22px}
+.proof .num .row{display:flex;gap:36px}
+.proof .num .row div .big{font-size:34px}
+.proof .ctx{padding:32px;font-size:15.5px}
+.proof .ctx h3{font-size:18px;margin-bottom:10px}
+.proof .ctx dl{display:grid;grid-template-columns:120px 1fr;gap:6px 14px;margin:12px 0}
+.proof .ctx dt{color:var(--mute)}
+.caveat{font-size:13.5px;color:var(--mute);border-top:1px solid var(--line);padding-top:12px;margin-top:14px}
+.source-caveat{display:block;background:#f3f6fa;border-left:3px solid #8aa0bb;color:#4b5d73;font-size:13px;padding:10px 12px;margin-top:8px;border-radius:3px}
+table.cmp{width:100%;border-collapse:collapse;margin-top:36px;background:var(--white);border-radius:10px;overflow:hidden;font-size:15.5px}
+table.cmp th,table.cmp td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+table.cmp thead th{background:var(--ink);color:var(--white);font-weight:600}
+table.cmp thead th.us{background:var(--blue)}
+table.cmp td.us{background:#f4f8fd}
+table.cmp td:first-child{font-weight:600;width:22%}
+.honest{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:36px}
+.honest .card h3{margin-bottom:10px}
+.honest .no li::marker{content:"✕  ";color:#b23a3a}
+.honest .yes li::marker{content:"→  ";color:var(--blue)}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:36px}
+.steps div{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:22px;position:relative;font-size:15.5px}
+.steps div:before{counter-increment:s;content:counter(s);display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--blue);color:var(--white);font-weight:700;margin-bottom:12px}
+.steps b{display:block;margin-bottom:4px}
+details{border-bottom:1px solid var(--line);padding:18px 0}
+details summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none;display:flex;justify-content:space-between}
+details summary:after{content:"+";color:var(--blue);font-size:22px;line-height:1}
+details[open] summary:after{content:"–"}
+details p{margin-top:10px;color:var(--ink);font-size:15.5px;max-width:820px}
+.faq{max-width:860px;margin-top:26px}
+.close{background:var(--blue);color:var(--white)}
+.close h2{color:var(--white)}
+.close .sub{color:rgba(255,255,255,.88)}
+form.f{background:var(--white);color:var(--ink);border-radius:12px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+form.f label{font-size:13px;font-weight:600;color:var(--mute);display:block;margin-bottom:4px}
+form.f input,form.f select,form.f textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:6px;font:inherit;font-size:15px}
+form.f .full{grid-column:1/-1}
+form.f .btn{width:100%}
+footer{padding:28px 0;font-size:13px;color:var(--mute);border-top:1px solid var(--line)}
+footer ol{margin:10px 0 0 18px}
+@media(max-width:860px){
+  .hero h1{font-size:34px}
+  .hgrid,.beats,.grid3,.grid2,.links,.proof,.honest,.steps,form.f{grid-template-columns:1fr}
+  table.cmp{font-size:14px}
+}
+
+.kicker{font-size:19px;font-weight:600;max-width:600px;border-left:3px solid var(--white);padding-left:14px;margin-bottom:16px}
+.hero p.lead{font-size:17px}
+.run{display:grid;grid-template-columns:1.1fr 1fr;margin-top:36px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.run-main{background:var(--blue);color:var(--white);padding:44px 40px;display:flex;flex-direction:column;justify-content:center}
+.run-main .big{font-size:84px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.run-main .lbl{font-size:20px;opacity:.92;margin-top:8px}
+.facts{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);align-items:center}
+.facts li{padding:28px 22px;border-left:1px solid var(--line)}
+.facts b{display:block;font-size:28px;color:var(--blue);line-height:1.1}
+.facts span{font-size:14px;color:var(--mute)}
+.run-caveat{grid-column:1/-1;background:#f3f5f8;color:var(--mute);font-size:13.5px;padding:14px 22px;border-top:1px solid var(--line)}
+.legend{display:flex;gap:28px;flex-wrap:wrap;font-size:14px;font-weight:600;margin-bottom:18px}
+.legend span{display:flex;align-items:center;gap:10px}
+.legend .k{display:inline-block;width:38px;height:0;border-top:3px solid var(--blue)}
+.legend .k.dash{border-top:3px dashed #8aa0bb}
+.labs{margin-top:36px;border-top:2px solid var(--blue)}
+.lab{display:grid;grid-template-columns:1.1fr .9fr 2fr;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--line)}
+.lab .stage{font-size:21px;font-weight:700}
+.lab .stage span{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+.lab .who{color:var(--mute);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips i{font-style:normal;font-size:14px;background:var(--blue-t);color:var(--blue-d);padding:6px 12px;border-radius:999px}
+.cmp{display:grid;grid-template-columns:repeat(3,1fr);gap:0 18px;margin-top:36px}
+.opt{display:grid;grid-row:span 5;grid-template-rows:subgrid;background:var(--white);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.opt h3{font-size:17px;padding:16px 20px;background:var(--ink);color:var(--white)}
+.opt.us{border:2px solid var(--blue)}
+.opt.us h3{background:var(--blue)}
+.opt>div{padding:14px 20px;border-top:1px solid var(--line);font-size:15.5px}
+.opt>div>span:first-child{display:block;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:2px}
+.split{display:grid;grid-template-columns:1fr 1fr;margin-top:36px;border:2px solid var(--blue);border-radius:12px}
+.split>div{padding:30px 34px}
+.split .yes{background:var(--blue-t);border-radius:0 10px 10px 0}
+.split h3{font-size:19px;margin-bottom:12px}
+.split ul{margin-left:22px;font-size:15.5px}
+.split li{margin:7px 0}
+.split .no li::marker{content:"✕  ";color:#b23a3a}
+.split .yes li::marker{content:"→  ";color:var(--blue)}
+.tl{counter-reset:s;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:44px;position:relative}
+.tl:before{content:"";position:absolute;top:19px;left:0;right:0;height:2px;background:var(--blue-l)}
+.tl>div{position:relative;font-size:15.5px}
+.tl>div:before{counter-increment:s;content:counter(s);display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--blue);color:var(--white);font-weight:700;margin-bottom:14px;box-shadow:0 0 0 6px var(--blue-t)}
+.tl b{display:block;margin-bottom:4px;font-size:17px}
+@media(max-width:860px){
+  .run,.split,.lab{grid-template-columns:1fr}
+  .run-main .big{font-size:56px}
+  .facts li{border-left:0;border-top:1px solid var(--line);padding:18px 22px}
+  .facts li:first-child{border-top:0}
+  .lab{gap:8px}
+  .cmp{display:block}
+  .opt{display:block;margin-bottom:16px}
+  .split .yes{border-radius:0 0 10px 10px}
+  .tl{grid-template-columns:1fr;gap:22px}
+  .tl:before{display:none}
+}
+@media(max-width:520px){.facts{grid-template-columns:1fr}}
+
+.tabs{display:inline-flex;flex-wrap:wrap;gap:2px;border:1px solid var(--line);border-radius:999px;padding:4px;background:var(--white);margin-top:26px}
+.tabs button{border:0;background:transparent;padding:9px 20px;border-radius:999px;font:inherit;font-size:15px;font-weight:600;color:var(--mute);cursor:pointer}
+.tabs button:hover{color:var(--blue)}
+.tabs button[aria-selected=true]{background:var(--blue);color:var(--white)}
+.tabs button:focus-visible{outline:3px solid var(--blue-l);outline-offset:1px}
+#run .run{margin-top:16px}
+.explorer{margin-top:34px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:28px}
+.route{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.route .rl{font-weight:700}
+.route .tabs{margin-top:0}
+.route p{flex-basis:100%;font-size:15.5px;max-width:840px}
+.route .fine{font-size:13px;color:var(--mute)}
+.exgrid{display:grid;grid-template-columns:420px 1fr;gap:40px;align-items:start;margin-bottom:18px}
+.exgrid .legend{font-size:13px;gap:8px 22px;font-weight:500;color:var(--mute)}
+#flow{width:100%;max-width:420px;height:auto;display:block;margin:0 auto}
+#flow .t{font:600 15px 'Segoe UI',Roboto,Arial,sans-serif;fill:#14233a}
+#flow .s{font:12.5px 'Segoe UI',Roboto,Arial,sans-serif;fill:#5a6b82}
+#flow .edge{color:#005eb8;transition:opacity .2s}
+#flow .edge .ln{stroke:currentColor;stroke-width:2;fill:none}
+#flow .edge .hd{fill:currentColor}
+#flow .edge.dash{color:#8aa0bb}
+#flow .edge.dash .ln{stroke-dasharray:6 5}
+#flow .node{transition:opacity .2s;outline:none}
+#flow .node rect{fill:#fff;stroke:#005eb8;stroke-width:2}
+#flow .node.dashb rect{stroke:#8aa0bb;stroke-dasharray:6 5}
+#flow .node[data-step]{cursor:pointer}
+#flow .node[data-step]:hover rect{fill:#eaf2fb}
+#flow .node:focus-visible rect{stroke-width:4}
+#flow .node.sel rect,#flow .node.sel:hover rect{fill:#005eb8;stroke:#005eb8;stroke-dasharray:none}
+#flow .node.sel text{fill:#fff}
+#flow .node.end rect{fill:#eaf2fb}
+#flow .dim{opacity:.3}
+.panel{border-left:3px solid var(--blue);padding:2px 0 2px 28px;position:sticky;top:96px}
+.panel .tag{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.1em;text-transform:uppercase}
+.panel h3{font-size:25px;line-height:1.2;margin:2px 0 14px}
+.panel dl>div{padding:13px 0;border-top:1px solid var(--line)}
+.panel dt{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:2px}
+.panel dd{font-size:15.5px}
+.panel .go{display:inline-block;margin-top:14px;font-weight:600}
+.tabs.wide{display:flex;width:fit-content;max-width:100%}
+.optpanel{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:0;margin-top:16px;background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.optpanel>div{padding:26px 28px;border-left:1px solid var(--line);font-size:15.5px}
+.optpanel>div:first-child{border-left:0}
+.optpanel h4{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+.optpanel ul{margin-left:18px}
+.optpanel li{margin:5px 0}
+.optpanel .gain{background:var(--blue-t)}
+.interest{font-size:14px;margin-top:14px;display:inline-block;background:rgba(255,255,255,.14);padding:6px 12px;border-radius:6px}
+@media(max-width:860px){
+  .exgrid{grid-template-columns:1fr;gap:22px}
+  #flow .t{font-size:17px}
+  #flow .s{font-size:13.5px}
+  .panel{position:static;border-left:0;border-top:3px solid var(--blue);padding:18px 0 0;scroll-margin-top:90px}
+  .explorer{padding:20px}
+  .optpanel{grid-template-columns:1fr}
+  .optpanel>div{border-left:0;border-top:1px solid var(--line)}
+  .optpanel>div:first-child{border-top:0}
+  .tabs.wide{flex-direction:column;border-radius:14px;width:100%}
+  .tabs.wide button{text-align:left;border-radius:10px}
+  .route .tabs{border-radius:14px}
+}
+
+/* Highlight the ROMACO option without hiding its trade-off */
+#opt-tabs{display:grid;grid-template-columns:1fr 1fr 1.2fr;width:100%;gap:12px;border:0;border-radius:0;padding:0;background:transparent}
+#opt-tabs button{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:64px;padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:var(--white);color:var(--ink);text-align:left;font-size:15px;line-height:1.35}
+#opt-tabs button[aria-selected="true"]{background:var(--ink);color:var(--white);border-color:var(--ink)}
+#opt-tabs button[data-opt="rom"]{display:block;padding:27px 48px 14px 18px;border:2px solid var(--blue);border-radius:12px;background:var(--blue-t);color:var(--blue-d);box-shadow:0 8px 22px rgba(0,94,184,.14);text-align:left}
+#opt-tabs button[data-opt="rom"]:before{content:"ROMACO’S INTEGRATED OPTION";position:absolute;left:18px;top:8px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);font-weight:700}
+#opt-tabs button[data-opt="rom"]:after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:24px}
+#opt-tabs button[data-opt="rom"][aria-selected="true"]{background:var(--blue);color:var(--white);border-color:var(--blue)}
+#opt-tabs button[data-opt="rom"][aria-selected="true"]:before{color:var(--white);opacity:.9}
+#opt-tabs button:focus-visible{outline:3px solid var(--blue-l);outline-offset:2px}
+.optpanel.romaco-selected{border:2px solid var(--blue);box-shadow:0 12px 28px rgba(0,94,184,.12)}
+.optpanel.romaco-selected .gain{background:var(--blue);color:var(--white)}
+.optpanel.romaco-selected .gain h4{color:rgba(255,255,255,.86)}
+@media(max-width:860px){
+  #opt-tabs{grid-template-columns:1fr 1fr}
+  #opt-tabs button[data-opt="rom"]{grid-column:1/-1}
+}
+@media(max-width:520px){
+  #opt-tabs{grid-template-columns:1fr}
+  #opt-tabs button[data-opt="rom"]{grid-column:auto}
+}
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230.936 48" height="38" role="img" aria-label="ROMACO"><g data-name="Group 1"><path data-name="Path 1" d="M175.026 24.282c0 1.018-1.651 1.541-4.98 1.541h-7.126c-3.247 0-4.87-.523-4.87-1.541v-9.218c0-1.073 1.624-1.6 4.87-1.6h7.126c3.33 0 4.98.523 4.98 1.6zm3.99 1.018V14.019c0-3.026-3-4.54-8.97-4.54h-7.126a17.375 17.375 0 00-5.558.77c-2.284.771-3.412 2.036-3.412 3.77V25.3c0 1.624 1.156 2.834 3.494 3.632a16.676 16.676 0 005.476.881h7.126a16.975 16.975 0 005.53-.8c2.284-.77 3.439-2.036 3.439-3.714" fill="#005eb8"/><path data-name="Path 2" d="M49.826 24.282c0 1.018-1.651 1.541-4.98 1.541h-7.127c-3.247 0-4.87-.523-4.87-1.541v-9.218c0-1.073 1.624-1.6 4.87-1.6h7.127c3.329 0 4.98.523 4.98 1.6zm3.989 1.018V14.019c0-3.026-3-4.54-8.97-4.54h-7.127a17.371 17.371 0 00-5.558.77c-2.284.771-3.412 2.036-3.412 3.77V25.3c0 1.624 1.156 2.834 3.495 3.632a16.674 16.674 0 005.475.881h7.127a16.977 16.977 0 005.53-.8c2.284-.77 3.439-2.036 3.439-3.714" fill="#005eb8"/><path data-name="Path 3" d="M150.976 29.812v-3.99h-15.555c-3.247 0-4.87-.578-4.87-1.761v-8.419c0-1.458 1.623-2.174 4.87-2.174h15.555v-3.99h-15.555a16.4 16.4 0 00-5.5.853c-2.311.8-3.467 2.036-3.467 3.687v11.277c0 1.761 1.156 3.027 3.494 3.77a17.8 17.8 0 005.475.743z" fill="#005eb8"/><path data-name="Path 4" d="M118.645 16.723v2.679h-16.976v-2.679c0-.766.547-1.5 1.668-2.214a6 6 0 013.308-1.066h6.78a6.734 6.734 0 013.663.984 2.7 2.7 0 011.559 2.3m3.964 12.959v-13.81q0-2.993-3.2-4.839a11.934 11.934 0 00-5.987-1.558h-6.78a11.681 11.681 0 00-5.632 1.366c-2.214 1.2-3.308 2.871-3.308 5.031v13.806h3.965v-6.315h16.978v6.315z" fill="#005eb8"/><path data-name="Path 5" d="M93.396 29.846V11.639a2.312 2.312 0 00-.519-1.586 1.57 1.57 0 00-1.258-.574 2.241 2.241 0 00-1.586.766l-14.565 14.9-14.373-14.9a2.238 2.238 0 00-1.613-.766 1.6 1.6 0 00-1.285.6 2.316 2.316 0 00-.492 1.558v18.208h3.964v-13.4l12.378 12.877a1.917 1.917 0 001.422.574 1.874 1.874 0 001.394-.547l12.569-12.954v13.451z" fill="#005eb8"/><path data-name="Path 6" d="M20.942 17.762c0 .383-.3.656-.875.875a3.707 3.707 0 01-1.312.246l-14.79.027v-5.468h12.056q4.921 0 4.921 1.312zm5.823 11.92l-12.931-6.834h4.921a8.517 8.517 0 003.937-.9 3.377 3.377 0 002.214-3.062v-4.892q0-2.911-3.281-3.937a20.214 20.214 0 00-5.6-.574H.005v20.2h3.964v-6.889h2.378l12.74 6.889z" fill="#005eb8"/><path data-name="Path 7" d="M178.598 37.767h-1.107l-2.933 6.3h-.027l-.847-6.3h-1.094l1.059 7.088h.378c-.415.81-.852 2.3-1.959 2.3a1.6 1.6 0 01-.369-.04l-.175.824a2.434 2.434 0 00.472.067c1.7 0 2.29-1.31 2.952-2.646zm-7.033 0h-1.067l-.189.891-.03.014c-.238-.851-1.087-.986-2.072-.986-2.43 0-3.064 1.269-3.566 3.631-.517 2.43-.27 3.618 2.025 3.618.837 0 2-.094 2.486-.959h.027l-.347 1.633c-.309 1.391-1.108 1.526-2.377 1.526-1.12 0-1.751-.081-1.461-1.445h-1.067c-.544 2.052.7 2.309 2.345 2.309 1.714 0 3.207-.418 3.609-2.309zm-4.459 6.3c-2.066 0-1.72-1.053-1.359-2.754.4-1.863.561-2.768 2.533-2.768 1.917 0 1.882.8 1.463 2.768-.336 1.58-.585 2.754-2.637 2.754m-9.243-2.754c.525-2.471.723-2.768 2.627-2.768s1.975.3 1.45 2.768-.72 2.754-2.624 2.754-1.975-.3-1.453-2.754m-1.107 0c-.634 2.984-.256 3.618 2.377 3.618s3.28-.634 3.915-3.618.259-3.631-2.374-3.631-3.28.634-3.918 3.631m-.409-6.588h-1.066l-2.153 10.132h1.067zm-9.478 6.592c.525-2.471.724-2.768 2.627-2.768s1.975.3 1.451 2.768-.721 2.754-2.624 2.754-1.975-.3-1.453-2.754m-1.107 0c-.635 2.984-.256 3.618 2.376 3.618s3.281-.634 3.915-3.618.259-3.631-2.374-3.631-3.281.634-3.917 3.631m-5.982-3.551h-1.066l-1.507 7.088h1.067l.878-4.131c.348-1.634.84-2.174 2.582-2.174 1.2 0 1.655.216 1.38 1.512l-1.016 4.796h1.07l1-4.712c.446-1.971-.328-2.457-2.151-2.457a2.615 2.615 0 00-2.388.944h-.027zm-7.387-3.038h-1.067l-2.148 10.129h1.066l.878-4.131c.348-1.634.84-2.174 2.581-2.174 1.2 0 1.655.216 1.38 1.512l-1.015 4.793h1.067l1-4.712c.446-1.971-.328-2.457-2.151-2.457a2.615 2.615 0 00-2.388.944h-.028zm-5.428 7.56l-.074.351c-.273 1.282-.79 1.431-2.127 1.431-2.079 0-2.031-.608-1.606-2.606.482-2.268.66-2.916 2.551-2.916 1.228 0 1.924.027 1.652 1.31l-.046.215h1.067l.04-.189c.428-2.012-.882-2.2-2.6-2.2-2.565 0-3.22 1.174-3.71 3.483-.56 2.632-.6 3.766 2.345 3.766 1.688 0 3.065-.256 3.49-2.255l.083-.392zm-11.431-1.607c.428-1.633.6-2.133 2.532-2.133 1.62 0 1.837.122 1.464 2.133zm3.579 2.025l-.057.27c-.212 1-.7 1.094-2.163 1.094-1.917 0-2.019-.284-1.543-2.525h5.1l.152-.716c.557-2.619-.06-3.146-2.355-3.146-2.538 0-3.333.688-3.958 3.631-.574 2.7-.35 3.618 2.417 3.618 1.579 0 3.044-.094 3.443-1.971l.055-.256zm-5.241-4.941h-2.741l.365-1.715h-1.066l-.365 1.715h-.945l-.184.864h.945l-.887 4.172c-.353 1.661-.075 2.133 1.585 2.133a2.247 2.247 0 002.478-2.065l.112-.527h-1.013l-.112.527c-.143.675-.255 1.2-1.254 1.2-.783 0-.948-.176-.8-.945l.956-4.5h2.74zm-13.233 7.092h1.066l2.152-10.125h-1.066l-.833 3.915h-.027c-.127-.865-1.295-.958-2.078-.958-2.538 0-3.1 1.5-3.553 3.631-.459 2.16-.513 3.618 2.012 3.618a2.779 2.779 0 002.494-1l.021.028zm-1.8-.783c-1.526 0-1.948-.3-1.426-2.754.528-2.484.966-2.768 2.6-2.768 1.742 0 1.8.824 1.383 2.768-.465 2.187-.9 2.754-2.557 2.754m-8.475-6.3h-1.067l-1.506 7.088h1.067l.878-4.131c.347-1.634.84-2.174 2.582-2.174 1.2 0 1.655.216 1.379 1.512l-1.019 4.793h1.066l1-4.712c.446-1.971-.328-2.457-2.151-2.457a2.615 2.615 0 00-2.388.944h-.027zm-8.841 3.551c.525-2.471.723-2.768 2.626-2.768s1.975.3 1.45 2.768-.721 2.754-2.624 2.754-1.975-.3-1.453-2.754m-1.107 0c-.634 2.984-.256 3.618 2.376 3.618s3.281-.634 3.915-3.618.259-3.631-2.374-3.631-3.281.634-3.917 3.631m-.1-3.551h-1.107l-2.933 6.3h-.027l-.847-6.3h-1.093l1.06 7.083h.378c-.416.81-.853 2.3-1.96 2.3a1.612 1.612 0 01-.37-.04l-.175.824a2.432 2.432 0 00.472.067c1.7 0 2.29-1.31 2.952-2.646zM67.721 40.69c.428-1.633.6-2.133 2.533-2.133 1.62 0 1.837.122 1.464 2.133zm3.579 2.025l-.057.27c-.212 1-.7 1.094-2.163 1.094-1.917 0-2.019-.284-1.543-2.525h5.1l.152-.716c.557-2.619-.06-3.146-2.355-3.146-2.538 0-3.332.688-3.958 3.631-.574 2.7-.35 3.618 2.417 3.618 1.58 0 3.044-.094 3.443-1.971l.055-.256zm-13.307 2.142h1.066l.178-.837.033-.027c.228.77 1.122.945 2.081.945 2.457 0 3.046-1.31 3.537-3.618.47-2.214.448-3.631-2-3.631a2.711 2.711 0 00-2.494 1h-.025l.841-3.956h-1.067zm5.787-3.537c-.413 1.944-.653 2.754-2.543 2.754-1.566 0-1.887-.459-1.4-2.754.43-2.025.71-2.768 2.573-2.768 1.7 0 1.863.445 1.369 2.768" fill="#75787b"/><path data-name="Path 8" d="M220.643 19.312v-5.109q0-3-3.375-4.049a22.967 22.967 0 00-6.027-.591h-16.155l5.378 4.078h10.7c3.375 0 5.324.45 5.324 1.35v3.018c0 .394-.309.675-.9.9a3.825 3.825 0 01-1.35.253l-19.082.026 16.214 11.157h7.887l-10.314-6.459s-.572-.346-.859-.482a3.7 3.7 0 00-.572-.213l2.334.034 4.167-.006a10.01 10.01 0 004.353-.758 3.474 3.474 0 002.278-3.15" fill="#005eb8"/><path data-name="Path 9" d="M230.936 28.571V9.398s-.308-9.366-10.452-9.4h-25.181s-9.525.3-9.548 10.376v3.508l4.217 2.9v-6.543a5.7 5.7 0 015.723-6.024h25.076c6.024 0 5.949 5.723 5.949 5.723v18.524a5.656 5.656 0 01-5.648 6.024h-5.411l6.055 4.162a9.618 9.618 0 009.22-10.079" fill="#005eb8"/></g></svg><small>Pharma Process Solutions · Solid dose</small></div>
+    <a href="#discuss" class="btn sm">Discuss your solid-dose process</a>
+  </div>
+</header>
+
+<!-- HERO (story-led) -->
+<div class="hero">
+  <div class="wrap hgrid">
+    <div>
+      <div class="eyebrow">A trial on the Kilian KTP 720X</div>
+      <h1>Metformin doesn't like to be pressed.</h1>
+      <p class="kicker">A ROMACO-published KTP 720X trial held tablet-weight variation within ±1% at 80 RPM.</p>
+      <p class="lead">Metformin is hygroscopic, flows poorly, and often makes up more than 80% of the tablet. That makes it a quick test of whether a press can hold weight at speed.</p>
+      <div class="act">
+        <a href="#discuss" class="btn">Discuss your solid-dose process</a>
+        <a href="#run" class="btn ghost">See the run</a>
+      </div>
+    </div>
+    <figure class="hfig">
+      <img src="https://www.romaco.com/files/_processed_/2/d/csm_img_Products_Kilian-KTP720X-Key-Feature-02_d60f1eaa6f.jpg" alt="Romaco Kilian KTP 720X tablet press">
+      <figcaption>Kilian KTP 720X tablet press </figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- 1 · THE RUN (proof first) -->
+<section id="run">
+  <div class="wrap">
+    <h2>50 minutes later, the blend was used up</h2>
+    <p class="sub">After a first run at 65 RPM, the turret speed was raised to 80 RPM and held until the blend ran out. These are the two conditions ROMACO published. Nothing in between is simulated.</p>
+    <div class="tabs" role="tablist" aria-label="Trial condition" id="run-tabs">
+      <button type="button" role="tab" aria-selected="false" data-run="65">65 RPM</button>
+      <button type="button" role="tab" aria-selected="true" data-run="80">80 RPM</button>
+    </div>
+    <div class="run" aria-live="polite">
+      <div class="run-main"><div class="big" id="r-big">~488,000</div><div class="lbl">tablets per hour</div></div>
+      <ul class="facts" id="r-facts">
+        <li><b>80 RPM</b><span>turret speed</span></li>
+        <li><b>50 min</b><span>continuous run</span></li>
+        <li><b>±1%</b><span>tablet-weight variation</span></li>
+      </ul>
+      <p class="run-caveat">One press, one formulation. ROMACO published this trial; it has not been independently verified, and batch size and measurement method aren't stated. It shows the compression stage only, not the full granulation–compression–coating chain. Results depend on formulation, equipment configuration and process conditions. <a href="https://www.romaco.com/solutions/tableting/handling-tablet-weight-variations-in-large-scale-production">Source</a><span id="r-note" hidden><br><span class="source-caveat">The source also lists a weight range of 1,150.80–1,180.00 mg against a 1,160 mg target, which is wider than ±0.6%. ROMACO to clarify how the figure was calculated.</span></span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · BRIDGE / PROCESS EXPLORER -->
+<section class="tint" id="process">
+  <div class="wrap">
+    <h2>But a press is only as good as what goes into the hopper</h2>
+    <p class="sub">The run tested one stage. In your plant, each stage hands its output to the next: powder flow decides how evenly the dies fill, and the tablet core decides what coating can achieve. Select a step to see what it passes on.</p>
+    <div class="explorer">
+      <div class="route">
+        <span class="rl">My process</span>
+        <div class="tabs" role="tablist" aria-label="My process" id="route-tabs">
+          <button type="button" role="tab" aria-selected="false" data-route="gran">Granulation (wet or dry)</button>
+          <button type="button" role="tab" aria-selected="false" data-route="dc">Direct compression</button>
+          <button type="button" role="tab" aria-selected="true" data-route="none">Not decided yet</button>
+        </div>
+        <p id="route-desc" aria-live="polite"></p>
+        <p class="fine">This explains the pathways. It isn't a process recommendation.</p>
+      </div>
+      <div class="exgrid">
+        <div>
+          <div class="legend"><span><i class="k solid"></i>In every pathway, or the route you selected</span><span><i class="k dash"></i>Depends on formulation</span></div>
+          <svg id="flow" viewBox="0 0 420 520" role="group" aria-label="Solid-dose pathway. Select a step for details.">
+            <g class="edge dash" data-b="gran"><path class="ln" d="M210 70 C210 96,105 92,105 112"/><path class="hd" d="M-5 -9 L5 -9 L0 0z" transform="translate(105,120)"/></g>
+            <g class="edge dash" data-b="dc"><path class="ln" d="M210 70 C210 96,315 92,315 112"/><path class="hd" d="M-5 -9 L5 -9 L0 0z" transform="translate(315,120)"/></g>
+            <g class="edge dash" data-b="gran"><path class="ln" d="M105 184 C105 212,180 204,196 226"/><path class="hd" d="M-5 -9 L5 -9 L0 0z" transform="translate(200,234) rotate(-30)"/></g>
+            <g class="edge dash" data-b="dc"><path class="ln" d="M315 184 C315 212,240 204,224 226"/><path class="hd" d="M-5 -9 L5 -9 L0 0z" transform="translate(220,234) rotate(30)"/></g>
+            <g class="edge dash"><path class="ln" d="M210 294 L210 336"/><path class="hd" d="M-5 -9 L5 -9 L0 0z" transform="translate(210,344)"/></g>
+            <g class="edge dash"><path class="ln" d="M210 404 L210 446"/><path class="hd" d="M-5 -9 L5 -9 L0 0z" transform="translate(210,454)"/></g>
+            <g class="edge dash"><path class="ln" d="M310 264 C392 264,392 479,322 479"/><path class="hd" d="M-5 -9 L5 -9 L0 0z" transform="translate(312,479) rotate(90)"/></g>
+
+            <g class="node" data-step="form" tabindex="0" role="button" aria-label="Formulation and material characterisation"><rect x="110" y="10" width="200" height="60" rx="8"/><text class="t" x="210" y="36" text-anchor="middle">Formulation</text><text class="s" x="210" y="55" text-anchor="middle">flow · particle size · drug load</text></g>
+            <g class="node dashb" data-step="gran" data-b="gran" tabindex="0" role="button" aria-label="Granulation"><rect x="10" y="120" width="190" height="64" rx="8"/><text class="t" x="105" y="148" text-anchor="middle">Granulation (wet / dry)</text><text class="s" x="105" y="167" text-anchor="middle">when the powder needs it</text></g>
+            <g class="node dashb" data-step="dc" data-b="dc" tabindex="0" role="button" aria-label="Direct compression"><rect x="220" y="120" width="190" height="64" rx="8"/><text class="t" x="315" y="148" text-anchor="middle">Direct compression</text><text class="s" x="315" y="167" text-anchor="middle">when the formulation allows</text></g>
+            <g class="node" data-step="comp" tabindex="0" role="button" aria-label="Tablet compression"><rect x="110" y="234" width="200" height="60" rx="8"/><text class="t" x="210" y="260" text-anchor="middle">Tablet compression</text><text class="s" x="210" y="279" text-anchor="middle">to product specification</text></g>
+            <g class="node dashb" data-step="coat" tabindex="0" role="button" aria-label="Coating"><rect x="110" y="344" width="200" height="60" rx="8"/><text class="t" x="210" y="370" text-anchor="middle">Coating</text><text class="s" x="210" y="389" text-anchor="middle">when needed</text></g>
+            <g class="node end"><rect x="110" y="454" width="200" height="50" rx="25"/><text class="t" x="210" y="484" text-anchor="middle">Finished tablet</text></g>
+          </svg>
+        </div>
+        <div class="panel" id="panel" aria-live="polite"></div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- 3 · MECHANISM: LABS -->
+<section>
+  <div class="wrap">
+    <h2>Application labs for each stage</h2>
+    <p class="sub">ROMACO lists application-lab capabilities for granulation and drying, tablet compression, and film coating.</p>
+    <div class="labs">
+      <div class="lab"><div class="stage"><span>Stage 1</span>Granulation &amp; drying</div><div class="who">InnoTech · Innojet</div><div class="chips"><i>Material characterisation</i><i>Feasibility</i><i>DoE &amp; scale-up</i></div></div>
+      <div class="lab"><div class="stage"><span>Stage 2</span>Tablet compression</div><div class="who">KiTech · Kilian</div><div class="chips"><i>Formulation analysis</i><i>Compression trials</i><i>Press selection</i></div></div>
+      <div class="lab"><div class="stage"><span>Stage 3</span>Film coating</div><div class="who">CoTech · Tecpharm</div><div class="chips"><i>Coating trials</i><i>Quality analysis</i><i>Speed &amp; efficiency</i></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · WHY THIS vs ALTERNATIVES -->
+<section class="tint">
+  <div class="wrap">
+    <h2>Your realistic options, compared fairly</h2>
+    <p class="sub">Other OEMs offer integrated solid-dose lines too. The question is which route fits your formulation, equipment and team. Pick one to see what you gain and what you give up.</p>
+    <div class="tabs wide" role="tablist" aria-label="Options" id="opt-tabs">
+      <button type="button" role="tab" aria-selected="true" data-opt="oem">Work with several OEMs</button>
+      <button type="button" role="tab" aria-selected="false" data-opt="up">Upgrade one existing stage</button>
+      <button type="button" role="tab" aria-selected="false" data-opt="rom">Consider an integrated ROMACO solution</button>
+    </div>
+    <div class="optpanel" id="opt-panel" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- 5 · HONESTY + COST TO YOU -->
+<section>
+  <div class="wrap">
+    <h2>What we won't claim, and what this asks of your team</h2>
+    <div class="split">
+      <div class="no"><h3>Not on this page, on purpose</h3>
+        <ul>
+          <li>That every tablet needs granulation or coating</li>
+          <li>That any machine makes your process compliant. Qualification and validation stay within your site's quality system (EU GMP Annex 15, FDA CGMP)</li>
+          <li>Guaranteed OEE, savings or payback figures</li>
+          <li>That ROMACO handles all IQ/OQ/PQ by default</li>
+        </ul></div>
+      <div class="yes"><h3>What your team should plan for</h3>
+        <ul>
+          <li>Formulation data and target specifications for the first discussion</li>
+          <li>Written MSDS approval before any material goes to a lab</li>
+          <li>Reviewing FAT/SAT and vendor documentation against your URS</li>
+          <li>Site readiness and downtime for installation </li>
+        </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · WHAT HAPPENS -->
+<section class="tint">
+  <div class="wrap">
+    <h2>What happens when you click</h2>
+    <div class="tl">
+      <div><b>Short form</b>Product type, current route, challenge, scale, market and timing.</div>
+      <div><b>Routing</b>To the InnoTech, KiTech or CoTech specialist, or your local contact. </div>
+      <div><b>Scope discussion</b>Process fit, talked through. No samples or confidential data needed yet.</div>
+      <div><b>Next step</b>Advice, a demo, a feasibility trial or a quotation. </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · FAQ (findable, not on decision path) -->
+<section>
+  <div class="wrap">
+    <h2>Questions engineers, QA and procurement ask</h2>
+    <div class="faq">
+      <details><summary>Do all tablet products need granulation and coating?</summary><p>No. Direct compression works for suitable formulations, and coating depends on the product and market requirements. The route is chosen by formulation, not set in advance.</p></details>
+      <details><summary>Can we evaluate just one processing stage?</summary><p>Each lab and equipment line can be discussed on its own. </p></details>
+      <details><summary>Does ROMACO perform IQ/OQ/PQ?</summary><p>ROMACO provides installation, commissioning and FAT/SAT within the agreed scope. Qualification and validation stay part of your site's quality system. </p></details>
+      <details><summary>Will it fit our existing equipment, MES or ERP?</summary><p>That depends on the model, interfaces and how the project is scoped, and gets reviewed with application and engineering. </p></details>
+      <details><summary>What does a lab trial include, how long does it take, and is it paid?</summary><p></p></details>
+      <details><summary>What about warranty, spare parts and service?</summary><p>ROMACO offers technical support, spare parts, training, retrofits and upgrades. </p></details>
+      <details><summary>Is ROMACO a contract manufacturer or packer?</summary><p>No. ROMACO supplies process equipment and application support. You manufacture your own product.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · CLOSE -->
+<section class="close" id="discuss">
+  <div class="wrap grid2" style="margin-top:0">
+    <div>
+      <h2>Bring one process question. Leave with the right next step.</h2>
+      <p class="sub">A sticking granule, an unstable press run, a coating defect you can't trace back: tell us where it shows up, and an application specialist for that stage will reply.</p>
+      <span class="interest" id="interest" hidden></span><br>
+    </div>
+    <form class="f" onsubmit="event.preventDefault();this.querySelector('button').textContent='Concept only: form not connected';">
+      <div><label>Name</label><input required></div>
+      <div><label>Work email</label><input type="email" required></div>
+      <div><label>Company &amp; role</label><input></div>
+      <div><label>Target market</label><select><option>EU</option><option>US</option><option>Asia-Pacific</option><option>Other</option></select></div>
+      <div><label>Current route</label><select id="f-route" name="route"><option value="gran">Granulation (wet or dry)</option><option value="dc">Direct compression</option><option value="none" selected>Not decided</option></select></div>
+      <div><label>Stage of concern</label><select id="f-stage" name="stage"><option value="gran">Granulation / drying</option><option value="comp">Compression</option><option value="coat">Coating</option><option value="all" selected>Across stages</option></select></div>
+      <div class="full"><label>What's happening, and what outcome do you need?</label><textarea rows="3"></textarea></div>
+      <div class="full"><input type="hidden" name="interest" id="f-interest" value=""><button class="btn" type="submit" id="cta-final">Discuss your solid-dose process</button></div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Concept mockup by F.Learning Studio, based on public ROMACO sources reviewed 17 Nov 2026. Not approved by ROMACO. Results quoted depend on formulation, equipment and process conditions.
+    <ol>
+      <li><a href="https://www.romaco.com/blog/detail/romaco-pharma-process-solutions-integration-expertise-and-innovation">ROMACO — Pharma Process Solutions</a></li>
+      <li><a href="https://www.romaco.com/solutions/tableting/handling-tablet-weight-variations-in-large-scale-production">ROMACO — KTP 720X Metformin trial</a></li>
+      <li><a href="https://www.romaco.com/solutions/lab/innotech">InnoTech</a> · <a href="https://www.romaco.com/solutions/lab/kitech">KiTech</a> · <a href="https://www.romaco.com/solutions/lab/cotech">CoTech</a></li>
+      <li><a href="https://health.ec.europa.eu/medicinal-products/eudralex/eudralex-volume-4_en">EudraLex Vol. 4 — Annex 15</a> · <a href="https://www.fda.gov/drugs/guidances-drugs/questions-and-answers-current-good-manufacturing-practice-requirements-equipment">FDA CGMP Equipment Q&amp;A</a></li>
+    </ol>
+  </div>
+</footer>
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)},$$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+  function tabs(id,attr,fn){$$('#'+id+' button').forEach(function(b){b.addEventListener('click',function(){
+    $$('#'+id+' button').forEach(function(x){x.setAttribute('aria-selected',x===b)});fn(b.getAttribute(attr),true);});});}
+
+  /* 1. Trial: two published conditions only */
+  var RUN={
+    '65':{big:'~400,000',facts:[['65 RPM','turret speed'],['Not stated','run duration'],['±0.6%','tablet-weight variation, as reported']],note:true},
+    '80':{big:'~488,000',facts:[['80 RPM','turret speed'],['50 min','continuous run'],['±1%','tablet-weight variation']],note:false}};
+  tabs('run-tabs','data-run',function(k){var d=RUN[k];$('#r-big').textContent=d.big;
+    $('#r-facts').innerHTML=d.facts.map(function(f){return '<li><b>'+f[0]+'</b><span>'+f[1]+'</span></li>'}).join('');
+    $('#r-note').hidden=!d.note;});
+
+  /* 2. Pathway explorer */
+  var SRC={inno:'https://www.romaco.com/solutions/lab/innotech',ki:'https://www.romaco.com/solutions/lab/kitech',co:'https://www.romaco.com/solutions/lab/cotech',
+    klocke:'https://www.romaco.com/files/website/07_Partner-References-Publications/Publications/2025/Files/EN_Klocke_PCR_June_final.pdf',
+    dc:'https://pmc.ncbi.nlm.nih.gov/articles/PMC8816834/',ktp:'https://www.romaco.com/solutions/tableting/handling-tablet-weight-variations-in-large-scale-production'};
+  var STEP={
+    form:{tag:'Starting point',title:'Formulation and material characterisation',cta:'Discuss your solid-dose process',stage:'all',
+      why:'Flowability, particle properties and the target product decide which route is open to you.',
+      next:'It settles whether the powder needs granulation or can go to the press directly.',
+      rom:'InnoTech lab for material characterisation and feasibility. KiTech lab for formulation analysis.',
+      link:[SRC.inno,'InnoTech laboratory']},
+    gran:{tag:'Depends on formulation',title:'Granulation (wet or dry)',cta:'Discuss granulation',stage:'gran',
+      why:'When a powder needs it, granulation adjusts properties such as flow, density and particle-size distribution.',
+      next:'Those granule properties affect how consistently the press fills and how well it runs.',
+      rom:'Innojet granulation, drying and coating equipment. InnoTech lab for trials, DoE and scale-up.',
+      link:[SRC.klocke,'Case: Klocke Pharma-Service on VENTILUS fluid-bed processing (sponsored publication)']},
+    dc:{tag:'Depends on formulation',title:'Direct compression',cta:'Discuss direct compression',stage:'comp',
+      why:'For suitable formulations, the blend goes to the press without a granulation step.',
+      next:'With no granulation to adjust the powder, the blend\'s own flow and compressibility carry straight into the press.',
+      rom:'KiTech lab for formulation analysis and compression trials. Kilian tablet presses.',
+      link:[SRC.dc,'Review: direct compaction process modelling (PMC)']},
+    comp:{tag:'In every pathway',title:'Tablet compression',cta:'Discuss tablet compression',stage:'comp',
+      why:'This is where the material becomes a tablet that has to meet the product specification.',
+      next:'The quality of the tablet core affects what the coater can achieve.',
+      rom:'Kilian tablet presses. KiTech lab for compression trials, tablet analysis and scale-up.',
+      link:[SRC.ktp,'Case: KTP 720X Metformin trial']},
+    coat:{tag:'When needed',title:'Film coating',cta:'Discuss coating',stage:'coat',
+      why:'Some products need a film coat for quality, function, stability or appearance. Many tablets are not coated.',
+      next:'It is the last process step in this pathway. The result depends on the tablet core it receives.',
+      rom:'Tecpharm tablet coaters. CoTech lab for coating trials and quality analysis.',
+      link:[SRC.co,'CoTech laboratory']}};
+  var ROUTE={
+    none:'Both routes lead to the press. Which one fits depends on your formulation\'s flow, particle properties and target product. Select a route to follow it through the diagram.',
+    gran:'Granulation adjusts powder properties such as flow, density and particle-size distribution before compression. Wet and dry granulation are both options.',
+    dc:'For suitable formulations, the blend goes to the press without a granulation step, so the blend\'s own properties carry straight into compression.'};
+
+  function showStep(k,user){var d=STEP[k];
+    $$('#flow .node').forEach(function(n){n.classList.toggle('sel',n.getAttribute('data-step')===k)});
+    $('#panel').innerHTML='<span class="tag">'+d.tag+'</span><h3>'+d.title+'</h3><dl>'+
+      '<div><dt>Why it matters</dt><dd>'+d.why+'</dd></div>'+
+      '<div><dt>What it passes on</dt><dd>'+d.next+'</dd></div>'+
+      '<div><dt>ROMACO equipment and lab</dt><dd>'+d.rom+'</dd></div>'+
+      '<div><dt>Read more</dt><dd><a href="'+d.link[0]+'">'+d.link[1]+'</a></dd></div></dl>'+
+      '<a class="go" href="#discuss">'+d.cta+' ↓</a>';
+    if(!user)return;
+    /* 4. carry the choice to the closing CTA and the form */
+    $('#cta-final').textContent=d.cta;$('#f-stage').value=d.stage;$('#f-interest').value=k;
+    var i=$('#interest');i.hidden=false;i.textContent='You selected: '+d.title;
+    if(window.matchMedia('(max-width:860px)').matches)$('#panel').scrollIntoView({behavior:'smooth',block:'start'});}
+  $$('#flow .node[data-step]').forEach(function(n){var k=n.getAttribute('data-step');
+    n.addEventListener('click',function(){showStep(k,true)});
+    n.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();showStep(k,true)}});});
+
+  function showRoute(r,user){$('#route-desc').textContent=ROUTE[r];
+    $$('#flow [data-b]').forEach(function(el){var b=el.getAttribute('data-b'),on=r===b,off=r!=='none'&&!on;
+      el.classList.toggle('dim',off);
+      if(el.classList.contains('edge'))el.classList.toggle('dash',!on);else el.classList.toggle('dashb',!on);});
+    if(user)$('#f-route').value=r;}
+  tabs('route-tabs','data-route',showRoute);
+
+  /* 5. Options */
+  var OPT={
+    oem:{best:'You have strong vendor relationships at each stage.',gain:['Keep the vendors and equipment your team knows','Choose each stage on its own merits'],trade:'Your team coordinates interfaces, support and validation across vendors.'},
+    up:{best:'One stage is the bottleneck.',gain:['Smaller scope and less change to the line','Retrofits and upgrades can extend existing equipment '],trade:'It doesn\'t fix problems that start upstream of the upgraded stage.'},
+    rom:{best:'You are defining or rethinking the route across stages.',gain:['One contact across the stages in scope ','An application lab for each stage, using your material','Equipment designed to work together'],trade:'More reliance on one supplier. Other OEMs offer integrated lines too, so compare on proof for your formulation.'}};
+  function showOpt(k){var d=OPT[k],panel=$('#opt-panel');panel.classList.toggle('romaco-selected',k==='rom');panel.innerHTML='<div><h4>Best when</h4>'+d.best+'</div><div class="gain"><h4>What you gain</h4><ul>'+
+    d.gain.map(function(g){return '<li>'+g+'</li>'}).join('')+'</ul></div><div><h4>Trade-off</h4>'+d.trade+'</div>';}
+  tabs('opt-tabs','data-opt',showOpt);
+
+  showStep('comp',false);showRoute('none',false);showOpt('oem');
+})();
+</script>
+</body>
+</html>
